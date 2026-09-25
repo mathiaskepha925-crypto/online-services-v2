@@ -1,0 +1,532 @@
+<!DOCTYPE html>
+<html lang="sw">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>ONLINE SERVICES AND STATIONERY CENTER 🇹🇿</title>
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=Lora:wght@500;600;700&family=Inter:wght@400;500;600;700&display=swap');
+
+  :root{
+    --ink:#1A1A1A;
+    --paper:#F7F3E9;
+    --deep:#0F3D3E;
+    --deep2:#164F4F;
+    --gold:#C8963E;
+    --line:#D8CFB8;
+    --danger:#8A2E2E;
+    --ok:#2A6F63;
+  }
+  *{box-sizing:border-box;}
+  body{margin:0;font-family:'Inter',sans-serif;color:var(--ink);background:var(--paper);}
+  h1,h2,h3{font-family:'Lora',serif;margin:0;}
+  a{color:inherit;}
+  .wrap{max-width:1040px;margin:0 auto;padding:0 24px;}
+
+  /* ---- HEADER ---- */
+  header{background:var(--deep);color:var(--paper);position:sticky;top:0;z-index:50;border-bottom:3px solid var(--gold);}
+  .headerbar{display:flex;align-items:center;justify-content:space-between;padding:16px 24px;max-width:1040px;margin:0 auto;flex-wrap:wrap;gap:10px;}
+  .brand{display:flex;align-items:center;gap:10px;}
+  .brand-seal{width:36px;height:36px;border:2px solid var(--gold);border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:16px;flex-shrink:0;}
+  .brand-name{font-family:'Lora',serif;font-weight:600;font-size:17px;line-height:1.2;}
+  nav{display:flex;gap:22px;font-size:14px;}
+  nav a{text-decoration:none;color:var(--paper);opacity:.85;}
+  nav a:hover{opacity:1;text-decoration:underline;text-underline-offset:4px;}
+  .admin-link{font-size:13px;opacity:.65;text-decoration:underline;}
+
+  /* ---- HERO ---- */
+  .hero{border-bottom:1px solid var(--line);padding:64px 0 48px;}
+  .hero-tag{color:var(--ok);font-weight:600;font-size:14px;margin-bottom:10px;}
+  .hero h1{font-size:38px;line-height:1.25;max-width:640px;color:var(--deep);}
+  .hero p{max-width:560px;font-size:16px;line-height:1.6;margin-top:16px;color:#3a3a3a;}
+  .hero-cta{margin-top:28px;display:flex;gap:14px;flex-wrap:wrap;}
+  .btn{display:inline-block;padding:13px 24px;border-radius:3px;font-weight:600;font-size:15px;text-decoration:none;cursor:pointer;border:1px solid transparent;}
+  .btn-primary{background:var(--deep);color:var(--paper);}
+  .btn-primary:hover{background:var(--deep2);}
+  .btn-outline{border-color:var(--deep);color:var(--deep);background:transparent;}
+  .btn-outline:hover{background:rgba(15,61,62,0.06);}
+
+  /* ---- SERVICES ---- */
+  .section{padding:56px 0;border-bottom:1px solid var(--line);}
+  .section-head{margin-bottom:32px;max-width:560px;}
+  .section-head h2{font-size:26px;color:var(--deep);}
+  .section-head p{margin-top:8px;color:#555;font-size:15px;}
+  .services-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(240px,1fr));gap:1px;background:var(--line);border:1px solid var(--line);}
+  .service-card{background:var(--paper);padding:24px;}
+  .service-card h3{font-size:17px;color:var(--deep);margin-bottom:10px;}
+  .service-card ul{margin:0 0 16px;padding-left:18px;font-size:14px;color:#444;line-height:1.7;}
+  .service-pick{font-size:13px;font-weight:600;color:var(--ok);cursor:pointer;background:none;border:none;padding:0;text-decoration:underline;text-underline-offset:3px;}
+
+  /* ---- FORM ---- */
+  .form-box{background:#fff;border:1px solid var(--line);padding:32px;max-width:640px;position:relative;}
+  .form-box::before{content:"";position:absolute;top:0;left:0;width:4px;height:100%;background:var(--gold);}
+  .field{margin-bottom:18px;}
+  label{display:block;font-size:13px;font-weight:600;color:var(--deep);margin-bottom:6px;}
+  input,select,textarea{width:100%;padding:11px 12px;border:1px solid var(--line);border-radius:3px;font-family:'Inter',sans-serif;font-size:14px;background:#fdfcf9;}
+  textarea{min-height:100px;resize:vertical;}
+  input:focus,select:focus,textarea:focus{outline:2px solid var(--ok);outline-offset:1px;}
+  .err{color:var(--danger);font-size:12px;margin-top:4px;display:none;}
+  .field.invalid .err{display:block;}
+  .field.invalid input,.field.invalid select,.field.invalid textarea{border-color:var(--danger);}
+  .form-note{font-size:13px;color:#666;margin-top:14px;line-height:1.6;}
+  .success-box{display:none;background:#EAF3EF;border:1px solid var(--ok);padding:22px;max-width:640px;}
+  .success-box h3{color:var(--deep);font-size:18px;margin-bottom:8px;}
+  .success-box p{font-size:14px;line-height:1.6;color:#333;margin:6px 0;}
+  .ref-code{font-family:'Lora',serif;font-weight:700;color:var(--deep);font-size:16px;}
+  .wa-send-btn{margin-top:14px;display:inline-flex;align-items:center;gap:8px;background:#1F8A4C;color:#fff;padding:12px 20px;border-radius:3px;text-decoration:none;font-weight:600;font-size:14px;}
+  .wa-send-btn:hover{background:#186f3c;}
+
+  /* ---- CONTACT ---- */
+  .contact-grid{display:grid;grid-template-columns:1fr 1fr;gap:32px;}
+  .contact-item{margin-bottom:14px;font-size:14px;}
+  .contact-item b{display:block;color:var(--deep);font-size:13px;margin-bottom:3px;}
+
+  footer{background:var(--deep);color:var(--paper);padding:28px 0;font-size:13px;opacity:.85;}
+  footer .wrap{display:flex;justify-content:space-between;flex-wrap:wrap;gap:10px;}
+
+  /* ---- ADMIN ---- */
+  #adminView{display:none;min-height:100vh;background:var(--paper);}
+  .admin-header{background:var(--deep);color:#fff;padding:16px 24px;display:flex;justify-content:space-between;align-items:center;border-bottom:3px solid var(--gold);}
+  .admin-header h2{font-family:'Lora',serif;font-size:18px;}
+  .admin-wrap{max-width:1100px;margin:0 auto;padding:28px 24px;}
+  .login-box{max-width:360px;margin:80px auto;background:#fff;border:1px solid var(--line);padding:32px;text-align:center;}
+  .login-box h2{color:var(--deep);margin-bottom:18px;font-size:20px;}
+  .stat-row{display:flex;gap:16px;margin-bottom:24px;flex-wrap:wrap;}
+  .stat-card{background:#fff;border:1px solid var(--line);padding:16px 20px;flex:1;min-width:140px;}
+  .stat-card .num{font-family:'Lora',serif;font-size:26px;color:var(--deep);font-weight:700;}
+  .stat-card .lbl{font-size:12px;color:#666;margin-top:2px;}
+  .req-table{width:100%;border-collapse:collapse;background:#fff;border:1px solid var(--line);}
+  .req-table th{background:#EFEAD9;text-align:left;padding:10px 12px;font-size:12px;color:var(--deep);border-bottom:1px solid var(--line);}
+  .req-table td{padding:10px 12px;font-size:13px;border-bottom:1px solid var(--line);vertical-align:top;}
+  .req-table tr:last-child td{border-bottom:none;}
+  .status-pill{display:inline-block;padding:3px 10px;border-radius:12px;font-size:11px;font-weight:600;}
+  .status-mpya{background:#FDECC8;color:#8a6416;}
+  .status-inaendelea{background:#DCEAFB;color:#2054a0;}
+  .status-kamilika{background:#DDF0E3;color:#1f7a45;}
+  select.status-select{width:auto;padding:5px 8px;font-size:12px;}
+  .row-actions{display:flex;gap:8px;align-items:center;}
+  .wa-mini{background:#1F8A4C;color:#fff;padding:5px 10px;border-radius:3px;text-decoration:none;font-size:12px;font-weight:600;white-space:nowrap;}
+  .empty-state{text-align:center;padding:60px 20px;color:#777;}
+  .logout-btn{background:transparent;border:1px solid rgba(255,255,255,.4);color:#fff;padding:7px 14px;border-radius:3px;font-size:13px;cursor:pointer;}
+  .back-link{font-size:13px;color:var(--paper);opacity:.8;text-decoration:none;}
+
+  @media(max-width:640px){
+    nav{display:none;}
+    .hero h1{font-size:28px;}
+    .contact-grid{grid-template-columns:1fr;}
+    .req-table{display:block;overflow-x:auto;}
+  }
+</style>
+</head>
+<body>
+
+<!-- ============ PUBLIC SITE ============ -->
+<div id="publicView">
+<header>
+  <div class="headerbar">
+    <div class="brand">
+      <div class="brand-seal">🇹🇿</div>
+      <div class="brand-name">ONLINE SERVICES &amp;<br>STATIONERY CENTER</div>
+    </div>
+    <nav>
+      <a href="#huduma">Huduma</a>
+      <a href="#omba">Omba Huduma</a>
+      <a href="#wasiliana">Wasiliana</a>
+    </nav>
+    <a href="#" class="admin-link" onclick="showAdmin();return false;">Admin →</a>
+  </div>
+</header>
+
+<section class="hero">
+  <div class="wrap">
+    <div class="hero-tag">RITA • TCU/NACTVET • HESLB • Stationery • Graphic Design</div>
+    <h1>Huduma zote mahali pamoja. Popote ulipo Tanzania.</h1>
+    <p>Kuanzia vyeti vya RITA hadi maombi ya vyuo na mikopo ya HESLB, hadi typing na graphic design — tunakuunganisha na huduma zote kwa haraka, urahisi na uaminifu.</p>
+    <div class="hero-cta">
+      <a href="#omba" class="btn btn-primary">Omba Huduma</a>
+      <a href="#wasiliana" class="btn btn-outline">Wasiliana Nasi</a>
+    </div>
+  </div>
+</section>
+
+<section class="section" id="huduma">
+  <div class="wrap">
+    <div class="section-head">
+      <h2>Huduma Zitolewazo</h2>
+      <p>Chagua huduma unayohitaji, kisha jaza fomu fupi hapo chini.</p>
+    </div>
+    <div class="services-grid">
+      <div class="service-card">
+        <h3>Huduma za RITA</h3>
+        <ul>
+          <li>Cheti cha kuzaliwa / kifo</li>
+          <li>Verification ya vyeti</li>
+          <li>Marekebisho ya taarifa</li>
+          <li>Kufuatilia maombi</li>
+        </ul>
+        <button class="service-pick" onclick="pickService('Huduma za RITA')">Omba huduma hii →</button>
+      </div>
+      <div class="service-card">
+        <h3>Kitaaluma &amp; Elimu</h3>
+        <ul>
+          <li>Vyuo TCU / NACTVET / CAS</li>
+          <li>Mikopo ya HESLB</li>
+          <li>Samia Scholarship</li>
+          <li>NECTA results &amp; AVN</li>
+        </ul>
+        <button class="service-pick" onclick="pickService('Kitaaluma & Elimu')">Omba huduma hii →</button>
+      </div>
+      <div class="service-card">
+        <h3>Serikali &amp; Online</h3>
+        <ul>
+          <li>TIN Number &amp; Certificate</li>
+          <li>Taxpayer services</li>
+          <li>Loss Report</li>
+          <li>Maombi ya Passport</li>
+        </ul>
+        <button class="service-pick" onclick="pickService('Serikali & Online')">Omba huduma hii →</button>
+      </div>
+      <div class="service-card">
+        <h3>Stationery</h3>
+        <ul>
+          <li>Typing &amp; Document Editing</li>
+          <li>PDF ↔ Word, merging</li>
+          <li>CV &amp; Cover Letter</li>
+        </ul>
+        <button class="service-pick" onclick="pickService('Stationery')">Omba huduma hii →</button>
+      </div>
+      <div class="service-card">
+        <h3>Graphic Design</h3>
+        <ul>
+          <li>Logo, Posters, Flyers</li>
+          <li>Business Cards</li>
+          <li>Photo Editing</li>
+        </ul>
+        <button class="service-pick" onclick="pickService('Graphic Design')">Omba huduma hii →</button>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="section" id="omba">
+  <div class="wrap">
+    <div class="section-head">
+      <h2>Omba Huduma</h2>
+      <p>Jaza fomu hapa chini. Ombi lako litahifadhiwa moja kwa moja kwenye mfumo wetu, na unaweza pia kulituma papo hapo kupitia WhatsApp.</p>
+    </div>
+
+    <form class="form-box" id="requestForm" novalidate>
+      <div class="field" id="f-name">
+        <label for="name">Jina Kamili</label>
+        <input type="text" id="name" placeholder="Mfano: Mathias Kepha">
+        <div class="err">Tafadhali andika jina lako kamili.</div>
+      </div>
+      <div class="field" id="f-phone">
+        <label for="phone">Namba ya Simu</label>
+        <input type="tel" id="phone" placeholder="07XXXXXXXX">
+        <div class="err">Tafadhali andika namba sahihi ya simu.</div>
+      </div>
+      <div class="field" id="f-service">
+        <label for="service">Chagua Huduma</label>
+        <select id="service">
+          <option value="">-- Chagua huduma --</option>
+          <option>Huduma za RITA</option>
+          <option>Kitaaluma & Elimu</option>
+          <option>Serikali & Online</option>
+          <option>Stationery</option>
+          <option>Graphic Design</option>
+          <option>Huduma Nyingine</option>
+        </select>
+        <div class="err">Tafadhali chagua huduma.</div>
+      </div>
+      <div class="field" id="f-details">
+        <label for="details">Maelezo ya Huduma</label>
+        <textarea id="details" placeholder="Eleza kwa ufupi unachohitaji..."></textarea>
+        <div class="err">Tafadhali andika maelezo ya huduma unayohitaji.</div>
+      </div>
+      <button type="submit" class="btn btn-primary" style="width:100%;">Tuma Ombi</button>
+      <p class="form-note">Ombi lako litahifadhiwa kwenye mfumo wetu papo hapo. Baada ya kutuma, unaweza pia kulituma kwa WhatsApp ili tukamilishe haraka.</p>
+    </form>
+
+    <div class="success-box" id="successBox">
+      <h3>✅ Ombi limepokelewa</h3>
+      <p>Namba ya kumbukumbu ya ombi lako: <span class="ref-code" id="refCodeOut"></span></p>
+      <p>Ombi lako limehifadhiwa kwenye mfumo wetu. Kwa majibu ya haraka, tuma ombi hili kwa WhatsApp pia:</p>
+      <a href="#" class="wa-send-btn" id="waSendLink" target="_blank">📲 Tuma kwa WhatsApp</a>
+    </div>
+  </div>
+</section>
+
+<section class="section" id="wasiliana" style="border-bottom:none;">
+  <div class="wrap">
+    <div class="section-head">
+      <h2>Tupo Tayari Kukuhudumia</h2>
+      <p>Una swali au unahitaji msaada? Wasiliana nasi moja kwa moja.</p>
+    </div>
+    <div class="contact-grid">
+      <div>
+        <div class="contact-item"><b>WhatsApp</b><a href="https://wa.me/255792401544" target="_blank">0792 401 544</a></div>
+        <div class="contact-item"><b>WhatsApp</b><a href="https://wa.me/255631805544" target="_blank">063 180 544</a></div>
+      </div>
+      <div>
+        <div class="contact-item"><b>Simu</b><a href="tel:+255622605844">0622 605 844</a></div>
+        <div class="contact-item"><b>Email</b><a href="mailto:mathiaskepha945@gmail.com">mathiaskepha945@gmail.com</a></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<footer>
+  <div class="wrap">
+    <div>© 2026 ONLINE SERVICES AND STATIONERY CENTER 🇹🇿</div>
+    <div>Huduma Zote Mahali Pamoja</div>
+  </div>
+</footer>
+</div>
+
+<!-- ============ ADMIN VIEW ============ -->
+<div id="adminView">
+  <div id="loginScreen">
+    <div class="login-box">
+      <h2>🔐 Admin Login</h2>
+      <div class="field" style="text-align:left;">
+        <label for="adminPass">Password</label>
+        <input type="password" id="adminPass" placeholder="Weka password">
+      </div>
+      <button class="btn btn-primary" style="width:100%;margin-top:8px;" onclick="tryLogin()">Ingia</button>
+      <p id="loginErr" style="color:#8A2E2E;font-size:13px;margin-top:10px;display:none;">Password si sahihi.</p>
+      <p style="margin-top:20px;"><a href="#" class="back-link" style="color:#0F3D3E;" onclick="hideAdmin();return false;">← Rudi kwenye website</a></p>
+    </div>
+  </div>
+
+  <div id="dashboardScreen" style="display:none;">
+    <div class="admin-header">
+      <h2>📋 Dashibodi ya Maombi</h2>
+      <div style="display:flex;gap:14px;align-items:center;">
+        <a href="#" class="back-link" onclick="hideAdmin();return false;">← Rudi kwenye website</a>
+        <button class="logout-btn" onclick="logout()">Toka</button>
+      </div>
+    </div>
+    <div class="admin-wrap">
+      <div class="stat-row" id="statRow"></div>
+      <div id="tableWrap"></div>
+    </div>
+  </div>
+</div>
+
+<script>
+/* ---------------- Storage helpers (persistent, shared across visitors) ---------------- */
+async function loadRequests(){
+  try{
+    const r = await window.storage.get('requests', true);
+    return r ? JSON.parse(r.value) : [];
+  }catch(e){
+    return [];
+  }
+}
+async function saveRequests(list){
+  try{
+    await window.storage.set('requests', JSON.stringify(list), true);
+    return true;
+  }catch(e){
+    console.error('Imeshindikana kuhifadhi', e);
+    return false;
+  }
+}
+function genRef(){
+  const d = new Date();
+  const stamp = d.getFullYear().toString().slice(2) + String(d.getMonth()+1).padStart(2,'0') + String(d.getDate()).padStart(2,'0');
+  const rand = Math.floor(1000 + Math.random()*9000);
+  return 'OSC-' + stamp + '-' + rand;
+}
+
+/* ---------------- Public form ---------------- */
+function pickService(name){
+  document.getElementById('service').value = name;
+  document.getElementById('omba').scrollIntoView({behavior:'smooth'});
+}
+
+const form = document.getElementById('requestForm');
+let lastSubmitted = null;
+
+form.addEventListener('submit', async function(e){
+  e.preventDefault();
+  const name = document.getElementById('name').value.trim();
+  const phone = document.getElementById('phone').value.trim();
+  const service = document.getElementById('service').value;
+  const details = document.getElementById('details').value.trim();
+
+  let valid = true;
+  const setInvalid = (id, bad) => {
+    const el = document.getElementById(id);
+    el.classList.toggle('invalid', bad);
+    if(bad) valid = false;
+  };
+  setInvalid('f-name', name.length < 2);
+  setInvalid('f-phone', phone.replace(/\D/g,'').length < 9);
+  setInvalid('f-service', !service);
+  setInvalid('f-details', details.length < 3);
+  if(!valid) return;
+
+  const submitBtn = form.querySelector('button[type=submit]');
+  submitBtn.disabled = true;
+  submitBtn.textContent = 'Inatuma...';
+
+  const ref = genRef();
+  const entry = {
+    id: ref,
+    name, phone, service, details,
+    status: 'Mpya',
+    createdAt: new Date().toISOString()
+  };
+
+  const list = await loadRequests();
+  list.unshift(entry);
+  const ok = await saveRequests(list);
+
+  submitBtn.disabled = false;
+  submitBtn.textContent = 'Tuma Ombi';
+
+  if(!ok){
+    alert('Samahani, imeshindikana kuhifadhi ombi lako. Tafadhali jaribu tena, au wasiliana nasi moja kwa moja kupitia WhatsApp.');
+    return;
+  }
+
+  lastSubmitted = entry;
+  form.style.display = 'none';
+  document.getElementById('successBox').style.display = 'block';
+  document.getElementById('refCodeOut').textContent = ref;
+
+  const waMsg = encodeURIComponent(
+    `Habari, naomba huduma:\nRef: ${ref}\nJina: ${name}\nSimu: ${phone}\nHuduma: ${service}\nMaelezo: ${details}`
+  );
+  document.getElementById('waSendLink').href = `https://wa.me/255792401544?text=${waMsg}`;
+});
+
+/* ---------------- Admin ---------------- */
+const ADMIN_PASSWORD = 'stationery2026'; // Badilisha hii password baadaye
+
+function showAdmin(){
+  document.getElementById('publicView').style.display = 'none';
+  document.getElementById('adminView').style.display = 'block';
+  window.scrollTo(0,0);
+  if(sessionStorage_ok() && sessionFlag()){
+    enterDashboard();
+  }
+}
+function hideAdmin(){
+  document.getElementById('adminView').style.display = 'none';
+  document.getElementById('publicView').style.display = 'block';
+}
+// We can't use sessionStorage per instructions; use an in-memory flag instead.
+let _loggedIn = false;
+function sessionStorage_ok(){ return true; }
+function sessionFlag(){ return _loggedIn; }
+
+function tryLogin(){
+  const val = document.getElementById('adminPass').value;
+  if(val === ADMIN_PASSWORD){
+    _loggedIn = true;
+    document.getElementById('loginErr').style.display = 'none';
+    enterDashboard();
+  }else{
+    document.getElementById('loginErr').style.display = 'block';
+  }
+}
+function logout(){
+  _loggedIn = false;
+  document.getElementById('adminPass').value = '';
+  document.getElementById('loginScreen').style.display = 'block';
+  document.getElementById('dashboardScreen').style.display = 'none';
+}
+
+async function enterDashboard(){
+  document.getElementById('loginScreen').style.display = 'none';
+  document.getElementById('dashboardScreen').style.display = 'block';
+  await renderDashboard();
+}
+
+async function renderDashboard(){
+  const list = await loadRequests();
+  const statRow = document.getElementById('statRow');
+  const tableWrap = document.getElementById('tableWrap');
+
+  const total = list.length;
+  const mpya = list.filter(r => r.status === 'Mpya').length;
+  const inaendelea = list.filter(r => r.status === 'Inaendelea').length;
+  const kamilika = list.filter(r => r.status === 'Kamilika').length;
+
+  statRow.innerHTML = `
+    <div class="stat-card"><div class="num">${total}</div><div class="lbl">Jumla ya Maombi</div></div>
+    <div class="stat-card"><div class="num">${mpya}</div><div class="lbl">Mapya</div></div>
+    <div class="stat-card"><div class="num">${inaendelea}</div><div class="lbl">Yanaendelea</div></div>
+    <div class="stat-card"><div class="num">${kamilika}</div><div class="lbl">Yamekamilika</div></div>
+  `;
+
+  if(total === 0){
+    tableWrap.innerHTML = `<div class="empty-state">Bado hakuna maombi yaliyotumwa.</div>`;
+    return;
+  }
+
+  const rows = list.map(r => {
+    const date = new Date(r.createdAt);
+    const dateStr = date.toLocaleDateString('sw-TZ', {day:'2-digit',month:'short',year:'numeric'}) + ' ' + date.toLocaleTimeString('sw-TZ',{hour:'2-digit',minute:'2-digit'});
+    const statusClass = r.status === 'Mpya' ? 'status-mpya' : (r.status === 'Inaendelea' ? 'status-inaendelea' : 'status-kamilika');
+    const waMsg = encodeURIComponent(`Habari ${r.name}, kuhusu ombi lako Ref: ${r.id} (${r.service}) — `);
+    return `
+      <tr>
+        <td><b>${r.id}</b><br><span style="color:#888;font-size:11px;">${dateStr}</span></td>
+        <td>${escapeHtml(r.name)}<br><span style="color:#888;font-size:11px;">${escapeHtml(r.phone)}</span></td>
+        <td>${escapeHtml(r.service)}</td>
+        <td style="max-width:220px;">${escapeHtml(r.details)}</td>
+        <td>
+          <select class="status-select" onchange="updateStatus('${r.id}', this.value)">
+            <option ${r.status==='Mpya'?'selected':''}>Mpya</option>
+            <option ${r.status==='Inaendelea'?'selected':''}>Inaendelea</option>
+            <option ${r.status==='Kamilika'?'selected':''}>Kamilika</option>
+          </select>
+        </td>
+        <td>
+          <div class="row-actions">
+            <a class="wa-mini" href="https://wa.me/255${r.phone.replace(/\D/g,'').replace(/^0/,'')}?text=${waMsg}" target="_blank">WhatsApp</a>
+          </div>
+        </td>
+      </tr>
+    `;
+  }).join('');
+
+  tableWrap.innerHTML = `
+    <table class="req-table">
+      <thead>
+        <tr>
+          <th>Ref / Tarehe</th>
+          <th>Mteja</th>
+          <th>Huduma</th>
+          <th>Maelezo</th>
+          <th>Hali</th>
+          <th>Mawasiliano</th>
+        </tr>
+      </thead>
+      <tbody>${rows}</tbody>
+    </table>
+  `;
+}
+
+async function updateStatus(id, newStatus){
+  const list = await loadRequests();
+  const item = list.find(r => r.id === id);
+  if(item){
+    item.status = newStatus;
+    await saveRequests(list);
+    await renderDashboard();
+  }
+}
+
+function escapeHtml(str){
+  const div = document.createElement('div');
+  div.textContent = str;
+  return div.innerHTML;
+}
+</script>
+</body>
+</html>
