@@ -330,7 +330,11 @@ async function loadRequests(){
     const res = await fetch(`${SUPABASE_URL}/rest/v1/requests?select=*&order=created_at.desc`, {
       headers: SB_HEADERS
     });
-    if(!res.ok) throw new Error('fetch failed');
+    if(!res.ok){
+      const errText = await res.text();
+      window.__lastDbError = `HTTP ${res.status}: ${errText}`;
+      throw new Error(window.__lastDbError);
+    }
     const rows = await res.json();
     // normalize to the shape the UI expects
     return rows.map(r => ({
@@ -343,6 +347,7 @@ async function loadRequests(){
       createdAt: r.created_at
     }));
   }catch(e){
+    window.__lastDbError = window.__lastDbError || e.message;
     console.error('Imeshindikana kupakia', e);
     return null; // null = error, distinct from empty list
   }
@@ -361,8 +366,13 @@ async function saveRequest(entry){
         status: entry.status
       })
     });
+    if(!res.ok){
+      const errText = await res.text();
+      window.__lastDbError = `HTTP ${res.status}: ${errText}`;
+    }
     return res.ok;
   }catch(e){
+    window.__lastDbError = e.message;
     console.error('Imeshindikana kuhifadhi', e);
     return false;
   }
@@ -433,7 +443,7 @@ form.addEventListener('submit', async function(e){
   submitBtn.textContent = 'Tuma Ombi';
 
   if(!ok){
-    alert('Samahani, imeshindikana kuhifadhi ombi lako. Tafadhali jaribu tena, au wasiliana nasi moja kwa moja kupitia WhatsApp.');
+    alert('Samahani, imeshindikana kuhifadhi ombi lako.\n\nSababu: ' + (window.__lastDbError || 'Haijulikani') + '\n\nTafadhali jaribu tena, au wasiliana nasi moja kwa moja kupitia WhatsApp.');
     return;
   }
 
@@ -497,7 +507,7 @@ async function renderDashboard(){
   const list = await loadRequests();
 
   if(list === null){
-    tableWrap.innerHTML = `<div class="empty-state">Imeshindikana kupakia maombi. Angalia mtandao wako kisha ujaribu tena.</div>`;
+    tableWrap.innerHTML = `<div class="empty-state">Imeshindikana kupakia maombi.<br><br><span style="font-size:11px;color:#999;word-break:break-all;">${escapeHtml(window.__lastDbError || 'Haijulikani')}</span></div>`;
     statRow.innerHTML = '';
     return;
   }
