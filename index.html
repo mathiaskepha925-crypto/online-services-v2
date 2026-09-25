@@ -315,21 +315,68 @@
 </div>
 
 <script>
-/* ---------------- Storage helpers (persistent, shared across visitors) ---------------- */
+/* ---------------- Supabase connection ---------------- */
+const SUPABASE_URL = 'https://bkytqowguvtgknnielcz.supabase.co';
+const SUPABASE_ANON_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImJreXRxb3dndXZ0Z2tubmllbGN6Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3OTAzMjQzMzMsImV4cCI6MjEwNTkwMDMzM30.T7_tgYnxZf6u3Mr3Jx0rBHVWirRV6uusi9E2luy3VlA';
+const SB_HEADERS = {
+  'apikey': SUPABASE_ANON_KEY,
+  'Authorization': 'Bearer ' + SUPABASE_ANON_KEY,
+  'Content-Type': 'application/json'
+};
+
+/* ---------------- Storage helpers (backed by Supabase, real persistent DB) ---------------- */
 async function loadRequests(){
   try{
-    const r = await window.storage.get('requests', true);
-    return r ? JSON.parse(r.value) : [];
+    const res = await fetch(`${SUPABASE_URL}/rest/v1/requests?select=*&order=created_at.desc`, {
+      headers: SB_HEADERS
+    });
+    if(!res.ok) throw new Error('fetch failed');
+    const rows = await res.json();
+    // normalize to the shape the UI expects
+    return rows.map(r => ({
+      id: r.ref,
+      name: r.name,
+      phone: r.phone,
+      service: r.service,
+      details: r.details,
+      status: r.status,
+      createdAt: r.created_at
+    }));
   }catch(e){
-    return [];
+    console.error('Imeshindikana kupakia', e);
+    return null; // null = error, distinct from empty list
   }
 }
-async function saveRequests(list){
+async function saveRequest(entry){
   try{
-    await window.storage.set('requests', JSON.stringify(list), true);
-    return true;
+    const res = await fetch(`${SUPABASE_URL}/rest/v1/requests`, {
+      method: 'POST',
+      headers: SB_HEADERS,
+      body: JSON.stringify({
+        ref: entry.id,
+        name: entry.name,
+        phone: entry.phone,
+        service: entry.service,
+        details: entry.details,
+        status: entry.status
+      })
+    });
+    return res.ok;
   }catch(e){
     console.error('Imeshindikana kuhifadhi', e);
+    return false;
+  }
+}
+async function updateRequestStatus(ref, newStatus){
+  try{
+    const res = await fetch(`${SUPABASE_URL}/rest/v1/requests?ref=eq.${encodeURIComponent(ref)}`, {
+      method: 'PATCH',
+      headers: SB_HEADERS,
+      body: JSON.stringify({ status: newStatus })
+    });
+    return res.ok;
+  }catch(e){
+    console.error('Imeshindikana kubadilisha hali', e);
     return false;
   }
 }
@@ -380,9 +427,7 @@ form.addEventListener('submit', async function(e){
     createdAt: new Date().toISOString()
   };
 
-  const list = await loadRequests();
-  list.unshift(entry);
-  const ok = await saveRequests(list);
+  const ok = await saveRequest(entry);
 
   submitBtn.disabled = false;
   submitBtn.textContent = 'Tuma Ombi';
@@ -447,9 +492,15 @@ async function enterDashboard(){
 }
 
 async function renderDashboard(){
-  const list = await loadRequests();
   const statRow = document.getElementById('statRow');
   const tableWrap = document.getElementById('tableWrap');
+  const list = await loadRequests();
+
+  if(list === null){
+    tableWrap.innerHTML = `<div class="empty-state">Imeshindikana kupakia maombi. Angalia mtandao wako kisha ujaribu tena.</div>`;
+    statRow.innerHTML = '';
+    return;
+  }
 
   const total = list.length;
   const mpya = list.filter(r => r.status === 'Mpya').length;
@@ -513,13 +564,8 @@ async function renderDashboard(){
 }
 
 async function updateStatus(id, newStatus){
-  const list = await loadRequests();
-  const item = list.find(r => r.id === id);
-  if(item){
-    item.status = newStatus;
-    await saveRequests(list);
-    await renderDashboard();
-  }
+  await updateRequestStatus(id, newStatus);
+  await renderDashboard();
 }
 
 function escapeHtml(str){
