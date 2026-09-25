@@ -131,6 +131,7 @@
     <nav>
       <a href="#huduma">Huduma</a>
       <a href="#omba">Omba Huduma</a>
+      <a href="#angalia">Angalia Hali</a>
       <a href="#wasiliana">Wasiliana</a>
     </nav>
     <a href="#" class="admin-link" onclick="showAdmin();return false;">Admin →</a>
@@ -253,6 +254,26 @@
       <p>Namba ya kumbukumbu ya ombi lako: <span class="ref-code" id="refCodeOut"></span></p>
       <p>Ombi lako limehifadhiwa kwenye mfumo wetu. Kwa majibu ya haraka, tuma ombi hili kwa WhatsApp pia:</p>
       <a href="#" class="wa-send-btn" id="waSendLink" target="_blank">📲 Tuma kwa WhatsApp</a>
+      <p class="form-note">Tunza namba ya kumbukumbu hapo juu — utaitumia kuangalia hali ya ombi lako.</p>
+    </div>
+  </div>
+</section>
+
+<section class="section" id="angalia">
+  <div class="wrap">
+    <div class="section-head">
+      <h2>Angalia Hali ya Ombi</h2>
+      <p>Weka namba ya kumbukumbu uliyopewa baada ya kutuma ombi lako, ili kuona hali yake ya sasa.</p>
+    </div>
+
+    <div class="form-box" style="max-width:480px;">
+      <div class="field" id="f-track">
+        <label for="trackRef">Namba ya Kumbukumbu (Ref)</label>
+        <input type="text" id="trackRef" placeholder="Mfano: OSC-260925-4821">
+        <div class="err">Tafadhali weka namba sahihi ya kumbukumbu.</div>
+      </div>
+      <button type="button" class="btn btn-primary" style="width:100%;" onclick="trackRequest()">Angalia Hali</button>
+      <div id="trackResult" style="margin-top:20px;display:none;"></div>
     </div>
   </div>
 </section>
@@ -389,6 +410,67 @@ async function updateRequestStatus(ref, newStatus){
     console.error('Imeshindikana kubadilisha hali', e);
     return false;
   }
+}
+async function fetchRequestByRef(ref){
+  try{
+    const res = await fetch(`${SUPABASE_URL}/rest/v1/requests?select=*&ref=eq.${encodeURIComponent(ref)}`, {
+      headers: SB_HEADERS
+    });
+    if(!res.ok) return { error: true };
+    const rows = await res.json();
+    if(rows.length === 0) return { notFound: true };
+    const r = rows[0];
+    return {
+      id: r.ref, name: r.name, phone: r.phone, service: r.service,
+      details: r.details, status: r.status, createdAt: r.created_at
+    };
+  }catch(e){
+    console.error('Imeshindikana kutafuta ombi', e);
+    return { error: true };
+  }
+}
+async function trackRequest(){
+  const input = document.getElementById('trackRef');
+  const field = document.getElementById('f-track');
+  const ref = input.value.trim();
+  const resultBox = document.getElementById('trackResult');
+
+  if(ref.length < 3){
+    field.classList.add('invalid');
+    resultBox.style.display = 'none';
+    return;
+  }
+  field.classList.remove('invalid');
+
+  resultBox.style.display = 'block';
+  resultBox.innerHTML = `<p style="color:#666;font-size:14px;">Inatafuta...</p>`;
+
+  const r = await fetchRequestByRef(ref);
+
+  if(r.error){
+    resultBox.innerHTML = `<p style="color:#8A2E2E;font-size:14px;">Imeshindikana kutafuta. Jaribu tena baadaye.</p>`;
+    return;
+  }
+  if(r.notFound){
+    resultBox.innerHTML = `<p style="color:#8A2E2E;font-size:14px;">Hakuna ombi lenye namba hiyo ya kumbukumbu. Hakikisha umeandika sahihi.</p>`;
+    return;
+  }
+
+  const statusClass = r.status === 'Mpya' ? 'status-mpya' : (r.status === 'Inaendelea' ? 'status-inaendelea' : 'status-kamilika');
+  const date = new Date(r.createdAt);
+  const dateStr = date.toLocaleDateString('sw-TZ', {day:'2-digit',month:'short',year:'numeric'});
+
+  resultBox.innerHTML = `
+    <div style="border:1px solid var(--line);padding:18px;background:#fdfcf9;">
+      <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:10px;">
+        <span class="ref-code">${escapeHtml(r.id)}</span>
+        <span class="status-pill ${statusClass}">${escapeHtml(r.status)}</span>
+      </div>
+      <p style="font-size:13px;margin:4px 0;"><b>Huduma:</b> ${escapeHtml(r.service)}</p>
+      <p style="font-size:13px;margin:4px 0;"><b>Tarehe ya kutuma:</b> ${dateStr}</p>
+      <p style="font-size:13px;margin:4px 0;"><b>Maelezo:</b> ${escapeHtml(r.details)}</p>
+    </div>
+  `;
 }
 function genRef(){
   const d = new Date();
